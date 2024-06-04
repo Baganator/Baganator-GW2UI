@@ -5,7 +5,7 @@ hooksecurefunc("SetItemButtonQuality", GW.SetBagItemButtonQualitySkin)
 
 local skinners = {
   ItemButton = function(frame)
-    GW.SkinBagItemButton(frame:GetName(), frame)
+    GW.SkinBagItemButton(frame:GetName(), frame, 37)
     if frame.SetItemButtonQuality then
       hooksecurefunc(frame, "SetItemButtonQuality", GW.SetBagItemButtonQualitySkin)
     end
