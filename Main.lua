@@ -55,10 +55,16 @@ local skinners = {
     GW.HandleTrimScrollBar(frame)
   end,
   CheckBox = function(frame)
-    --Not available in GW2
+    frame:GwSkinCheckButton()
+    frame:SetPoint("TOP", 0, -12)
+    frame:SetSize(15, 15)
   end,
   Slider = function(frame)
-    --Not available in GW2
+    frame:GwSkinSliderFrame()
+    frame:GetThumbTexture():SetSize(16, 16)
+    frame.tex:SetDrawLayer("ARTWORK")
+    frame.tex:SetPoint("TOPLEFT", -10, 2)
+    frame.tex:SetPoint("BOTTOMRIGHT", 10, -2)
   end,
   InsetFrame = function(frame)
     --Tricky in GW2
