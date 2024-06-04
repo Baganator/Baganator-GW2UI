@@ -67,7 +67,11 @@ local skinners = {
     frame.tex:SetPoint("BOTTOMRIGHT", 10, -2)
   end,
   InsetFrame = function(frame)
-    --Tricky in GW2
+    frame.Bg:Hide()
+    frame.NineSlice:Hide()
+    Mixin(frame, BackdropTemplateMixin)
+    frame:SetBackdrop(GW.BackdropTemplates.ColorableBorderOnly)
+    frame:SetBackdropBorderColor(0, 0, 0, 1)
   end,
 }
 
