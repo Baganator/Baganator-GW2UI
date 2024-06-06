@@ -38,8 +38,17 @@ local skinners = {
       CreateFrame("Cooldown", frame:GetName().."Cooldown", frame)
     end
     GW.SkinBagItemButton(frame:GetName(), frame, 37)
+    -- Ensure item icon and border is set GW2 style
     if frame.SetItemButtonQuality then
       hooksecurefunc(frame, "SetItemButtonQuality", GW.SetBagItemButtonQualitySkin)
+    end
+    -- Show white border if none is shown, like default GW2
+    if Baganator.Constants.IsClassic and frame.SetItemDetails then
+      hooksecurefunc(frame, "SetItemDetails", function(self, details)
+        if details.itemID and not frame.IconBorder:IsShown() then
+          frame.IconBorder:Show()
+        end
+      end)
     end
   end,
   IconButton = function(frame)
@@ -152,14 +161,48 @@ local function SkinFrame(details)
   end
 end
 
+local function DisableGW2Defaults()
+  if Baganator.Constants.IsClassic then
+    GW.SetSetting("BAG_SHOW_EQUIPMENT_SET_NAME",  false)
+    GW.SetSetting("BAG_ITEM_JUNK_ICON_SHOW",  false)
+    GW.SetSetting("BAG_ITEM_UPGRADE_ICON_SHOW",  false)
+    -- overwrites border from baganator to always show something at least white
+    GW.SetSetting("BAG_ITEM_QUALITY_BORDER_SHOW",  true)
+    GW.SetSetting("BAG_PROFESSION_BAG_COLOR",  false)
+    GW.SetSetting("BAG_SHOW_ILVL",  false)
+  else
+    GW.settings.BAG_SHOW_EQUIPMENT_SET_NAME =  false
+    GW.settings.BAG_ITEM_JUNK_ICON_SHOW =  false
+    GW.settings.BAG_ITEM_UPGRADE_ICON_SHOW =  false
+    -- needs to be on otherwise hides border used in Baganator
+    GW.settings.BAG_ITEM_QUALITY_BORDER_SHOW =  true
+    GW.settings.BAG_PROFESSION_BAG_COLOR =  false
+    GW.settings.BAG_SHOW_ILVL =  false
+  end
+end
+
+local function HideBagButtons()
+  MainMenuBarBackpackButton:SetParent(GW.HiddenFrame)
+  for i = 0, 3 do
+      _G["CharacterBag" .. i .. "Slot"]:Hide()
+  end
+  if CharacterReagentBag0Slot then
+    CharacterReagentBag0Slot:Hide()
+  end
+end
+
 local frame = CreateFrame("Frame")
 frame:RegisterEvent("PLAYER_ENTERING_WORLD")
 frame:SetScript("OnEvent", function()
   Baganator.API.Skins.RegisterListener(SkinFrame)
 
+  Baganator.Config.Set(Baganator.Config.Options.ICON_TEXT_QUALITY_COLORS, true)
   Baganator.Config.Set(Baganator.Config.Options.EMPTY_SLOT_BACKGROUND, true)
 
   for _, details in ipairs(Baganator.API.Skins.GetAllFrames()) do
     SkinFrame(details)
   end
+
+  DisableGW2Defaults()
+  HideBagButtons()
 end)
