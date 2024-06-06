@@ -101,11 +101,17 @@ local skinners = {
     GW.SkinTextBox(frame.Middle, frame.Left, frame.Right)
   end,
   TabButton = function(frame)
-    frame:GwSkinTab("down")
+    if Baganator.Constants.IsClassic then
+      frame:GwSkinButton(false, true, false, false, false, false)
+    else
+      frame:GwSkinTab("down")
+    end
   end,
   TopTabButton = function(frame)
     -- Don't skin tabs without a name, assumed to be named by GW2 classic
-    if not Baganator.Constants.IsClassic or frame:GetName() then
+    if Baganator.Constants.IsClassic then
+      frame:GwSkinButton(false, true, false, false, false, false)
+    else
       frame:GwSkinTab()
     end
   end,
