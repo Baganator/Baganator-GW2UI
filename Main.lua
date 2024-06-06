@@ -81,6 +81,8 @@ local skinners = {
       SkinContainerFrame(frame)
       frame.LiveButtons[1]:ClearAllPoints()
       frame.LiveButtons[1]:SetPoint("TOPLEFT", frame:GetTitleText(), "TOPRIGHT", 10, 0)
+      frame.LogsFrame:SetFrameStrata("DIALOG")
+      frame.TabTextFrame:SetFrameStrata("DIALOG")
     else
       GW.HandlePortraitFrame(frame, true)
     end
