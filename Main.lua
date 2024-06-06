@@ -135,7 +135,10 @@ local skinners = {
   end,
   InsetFrame = function(frame)
     frame.Bg:Hide()
-    frame.NineSlice:Hide()
+    frame:GwStripTextures()
+    if frame.NineSlice then
+      frame.NineSlice:Hide()
+    end
     Mixin(frame, BackdropTemplateMixin)
     frame:SetBackdrop(GW.BackdropTemplates.ColorableBorderOnly)
     frame:SetBackdropBorderColor(0, 0, 0, 1)
