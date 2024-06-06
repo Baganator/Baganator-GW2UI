@@ -184,10 +184,13 @@ end
 local function HideBagButtons()
   MainMenuBarBackpackButton:SetParent(GW.HiddenFrame)
   for i = 0, 3 do
-      _G["CharacterBag" .. i .. "Slot"]:Hide()
+      _G["CharacterBag" .. i .. "Slot"]:SetParent(GW.HiddenFrame)
   end
   if CharacterReagentBag0Slot then
-    CharacterReagentBag0Slot:Hide()
+    CharacterReagentBag0Slot:SetParent(GW.HiddenFrame)
+  end
+  if BagBarExpandToggle then
+    BagBarExpandToggle:SetParent(GW.HiddenFrame)
   end
 end
 
