@@ -33,6 +33,10 @@ end
 
 local skinners = {
   ItemButton = function(frame)
+    -- Fix for GW2 assuming named frames have a named cooldown
+    if frame:GetName() and not _G[frame:GetName().."Cooldown"] then
+      CreateFrame("Cooldown", frame:GetName().."Cooldown", frame)
+    end
     GW.SkinBagItemButton(frame:GetName(), frame, 37)
     if frame.SetItemButtonQuality then
       hooksecurefunc(frame, "SetItemButtonQuality", GW.SetBagItemButtonQualitySkin)
@@ -95,7 +99,13 @@ local skinners = {
     GW.SkinTextBox(frame.Middle, frame.Left, frame.Right)
   end,
   TabButton = function(frame)
-    frame:GwSkinTab()
+    frame:GwSkinTab("down")
+  end,
+  TopTabButton = function(frame)
+    -- Don't skin tabs without a name, assumed to be named by GW2 classic
+    if not Baganator.Constants.IsClassic or frame:GetName() then
+      frame:GwSkinTab()
+    end
   end,
   SideTabButton = function(frame)
     --Not available in GW2
