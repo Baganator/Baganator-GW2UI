@@ -176,6 +176,7 @@ local skinners = {
   end,
   CategoryLabel = function(btn)
     btn:GetFontString():SetFont(UNIT_NAME_FONT, 11)
+    btn:GetFontString():SetTextColor(1, 1, 1)
   end
 }
 
