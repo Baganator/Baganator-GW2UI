@@ -89,6 +89,12 @@ local function SkinContainerFrame(frame, topButtons, topRightButtons)
       end
     end)
   end
+
+  frame:HookScript("OnShow", function()
+    if frame:GetLeft() < 45 then
+      frame:SetPoint("LEFT", 45, 0)
+    end
+  end)
 end
 
 local function SetupIconButton(button, texture)
