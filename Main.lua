@@ -25,7 +25,7 @@ local function SkinContainerFrame(frame, topButtons, topRightButtons)
   frame.CloseButton:SetSize(20, 20)
 
   frame:GetTitleText():ClearAllPoints()
-  frame:GetTitleText():SetPoint("BOTTOMLEFT", frame.gwHeader, "BOTTOMLEFT", 20, 10)
+  frame:GetTitleText():SetPoint("BOTTOMLEFT", frame.gwHeader, "BOTTOMLEFT", 35, 10)
 
   frame.footer = frame:CreateTexture(nil, "BACKGROUND", nil, 7)
   frame.footer:SetTexture("Interface/AddOns/GW2_UI/textures/bag/bagfooter")
