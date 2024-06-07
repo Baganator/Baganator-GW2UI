@@ -1,8 +1,6 @@
 local _, addonTable = ...
 local GW = GW2_ADDON
 
-hooksecurefunc("SetItemButtonQuality", GW.SetBagItemButtonQualitySkin)
-
 local function ConvertTags(tags)
   local res = {}
   for _, tag in ipairs(tags) do
@@ -153,6 +151,12 @@ local skinners = {
     frame:SetBackdropBorderColor(0, 0, 0, 1)
   end,
 }
+
+if C_AddOns.IsAddOnLoaded("Masque") then
+  skinners.ItemButton = function() end
+else
+  hooksecurefunc("SetItemButtonQuality", GW.SetBagItemButtonQualitySkin)
+end
 
 local function SkinFrame(details)
   local func = skinners[details.regionType]
