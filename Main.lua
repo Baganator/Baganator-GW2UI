@@ -11,20 +11,43 @@ end
 
 Baganator.Constants.ButtonFrameOffset = 0
 
-local function SkinContainerFrame(frame)
+local function SkinContainerFrame(frame, topButtons)
   frame:GwStripTextures()
   GW.CreateFrameHeaderWithBody(frame, frame:GetTitleText(), "Interface/AddOns/GW2_UI/textures/bag/bagicon", {})
   frame.gwHeader:ClearAllPoints()
   frame.gwHeader:SetPoint("BOTTOMLEFT", frame, "TOPLEFT", 0, -25)
   frame.gwHeader:SetPoint("BOTTOMRIGHT", frame, "TOPRIGHT", 0, -25)
   frame.gwHeader.windowIcon:ClearAllPoints()
-  frame.gwHeader.windowIcon:SetPoint("CENTER", frame.gwHeader.BGLEFT, "LEFT", 21, -7)
+  frame.gwHeader.windowIcon:SetPoint("CENTER", frame, "TOPLEFT", -16, 0)
+  frame.gwHeader.windowIcon:SetSize(84, 84)
   frame.CloseButton:GwSkinButton(true)
-  frame.CloseButton:SetPoint("TOPRIGHT", 0, 7)
+  frame.CloseButton:SetPoint("TOPRIGHT", -10, 4)
+  frame.CloseButton:SetSize(20, 20)
+
+  frame:GetTitleText():ClearAllPoints()
+  frame:GetTitleText():SetPoint("BOTTOMLEFT", frame.gwHeader, "BOTTOMLEFT", 20, 10)
+
+  frame.footer = frame:CreateTexture(nil, "BACKGROUND", nil, 7)
+  frame.footer:SetTexture("Interface/AddOns/GW2_UI/textures/bag/bagfooter")
+  frame.footer:SetHeight(55)
+  frame.footer:SetPoint("TOPLEFT", frame, "BOTTOMLEFT", 0, 30)
+  frame.footer:SetPoint("TOPRIGHT", frame, "BOTTOMRIGHT", 0, 30)
+
+  frame.panelLeft = frame:CreateTexture(nil, "BACKGROUND", nil, 7)
+  frame.panelLeft:SetTexture("Interface/AddOns/GW2_UI/textures/bag/bagleftpanel")
+  frame.panelLeft:SetWidth(40)
+  frame.panelLeft:SetPoint("TOPRIGHT", frame, "TOPLEFT", 0, 25)
+  frame.panelLeft:SetPoint("BOTTOMRIGHT", frame, "BOTTOMLEFT", 0, 25)
+
+  frame.borderBottomRight = frame:CreateTexture(nil, "BORDER")
+  frame.borderBottomRight:SetTexture("Interface/AddOns/GW2_UI/textures/bag/bottom-right")
+  frame.borderBottomRight:SetSize(128, 128)
+  frame.borderBottomRight:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", 0, 0)
+
   hooksecurefunc(frame.SearchWidget, "SetSpacing", function(_, sideSpacing)
     frame.SearchWidget:ClearAllPoints()
     frame.SearchWidget.SearchBox:SetPoint("RIGHT", frame, -sideSpacing - 36, 0)
-    frame.SearchWidget.SearchBox:SetPoint("TOPLEFT", frame, "TOPLEFT", Baganator.Constants.ButtonFrameOffset + 64, - 28)
+    frame.SearchWidget.SearchBox:SetPoint("TOPLEFT", frame, "TOPLEFT", Baganator.Constants.ButtonFrameOffset, - 28)
   end)
   frame.SearchWidget.SearchBox:SetHeight(22)
 end
@@ -95,14 +118,17 @@ local skinners = {
     end
   end,
   SearchBox = function(frame)
-    frame:SetFont(UNIT_NAME_FONT, 14, "")
-    GW.SkinTextBox(frame.Middle, frame.Left, frame.Right)
-    frame:SetHeight(26)
-    frame.searchIcon:Hide()
-    frame:SetFont(UNIT_NAME_FONT, 14, "")
-    frame.Instructions:SetFont(UNIT_NAME_FONT, 14, "")
-    frame.Instructions:SetTextColor(178 / 255, 178 / 255, 178 / 255)
-
+    if GW.SkinBagSearchBox then
+      GW.SkinBagSearchBox(frame)
+    else
+      frame:SetFont(UNIT_NAME_FONT, 14, "")
+      GW.SkinTextBox(frame.Middle, frame.Left, frame.Right)
+      frame:SetHeight(26)
+      frame.searchIcon:Hide()
+      frame:SetFont(UNIT_NAME_FONT, 14, "")
+      frame.Instructions:SetFont(UNIT_NAME_FONT, 14, "")
+      frame.Instructions:SetTextColor(178 / 255, 178 / 255, 178 / 255)
+    end
   end,
   EditBox = function(frame)
     GW.SkinTextBox(frame.Middle, frame.Left, frame.Right)
@@ -143,6 +169,14 @@ local skinners = {
     frame:SetBackdrop(GW.BackdropTemplates.ColorableBorderOnly)
     frame:SetBackdropBorderColor(0, 0, 0, 1)
   end,
+  Divider = function(tex)
+    tex:SetTexture("Interface\\Common\\UI-TooltipDivider-Transparent")
+    tex:SetHeight(1)
+    tex:SetColorTexture(1, 0.93, 0.73, 0.45)
+  end,
+  CategoryLabel = function(btn)
+    btn:GetFontString():SetFont(UNIT_NAME_FONT, 11)
+  end
 }
 
 if C_AddOns.IsAddOnLoaded("Masque") then
