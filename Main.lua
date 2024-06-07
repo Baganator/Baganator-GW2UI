@@ -90,10 +90,34 @@ local function SkinContainerFrame(frame, topButtons, topRightButtons)
     end)
   end
 
+  frame.backgroundMask = UIParent:CreateMaskTexture()
+  frame.backgroundMask:SetPoint("TOPLEFT", frame, "TOPLEFT", -64, 64)
+  frame.backgroundMask:SetPoint("BOTTOMRIGHT", frame, "BOTTOMLEFT",-64, 0)
+  frame.backgroundMask:SetTexture(
+      "Interface/AddOns/GW2_UI/textures/masktest",
+      "CLAMPTOBLACKADDITIVE",
+      "CLAMPTOBLACKADDITIVE"
+  )
+
+  frame.tex:AddMaskTexture(frame.backgroundMask)
+  frame.panelLeft:AddMaskTexture(frame.backgroundMask)
+  frame.borderBottomRight:AddMaskTexture(frame.backgroundMask)
+  frame.footer:AddMaskTexture(frame.backgroundMask)
+
+
   frame:HookScript("OnShow", function()
     if frame:GetLeft() < 45 then
       frame:SetPoint("LEFT", 45, 0)
     end
+
+    GW.AddToAnimation("Baganator_" .. frame:GetName(), 0, 1, GetTime(), GW.WINDOW_FADE_DURATION,
+    function(p)
+        frame:SetAlpha(p)
+        frame.backgroundMask:SetPoint("BOTTOMRIGHT", frame.tex, "BOTTOMLEFT", GW.lerp(-64, frame.tex:GetWidth(), p) , 0)
+    end, 1, function()
+        frame.backgroundMask:SetPoint("TOPLEFT", frame.tex, "TOPLEFT", -64, 64)
+        frame.backgroundMask:SetPoint("BOTTOMRIGHT", frame.tex, "BOTTOMLEFT",-64, 0)
+    end)
   end)
 end
 
@@ -163,21 +187,28 @@ local skinners = {
   ButtonFrame = function(frame, tags)
     frame:SetFrameStrata("HIGH")
     if tags.backpack then
-      SkinContainerFrame(frame, frame.TopButtons, frame.AllFixedButtons)
       frame.BagSlots:ClearAllPoints()
       frame.BagSlots:SetPoint("BOTTOM", frame, "TOP", 0, 8)
       frame.BagSlots:SetPoint("LEFT", frame:GetTitleText(), "RIGHT")
+      SkinContainerFrame(frame, frame.TopButtons, frame.AllFixedButtons)
     elseif tags.bank then
-      SkinContainerFrame(frame, frame.Character.TopButtons, frame.AllFixedButtons)
       frame.Character.BagSlots:ClearAllPoints()
       frame.Character.BagSlots:SetPoint("BOTTOM", frame, "TOP", 0, 8)
       frame.Character.BagSlots:SetPoint("LEFT", frame:GetTitleText(), "RIGHT")
+      SkinContainerFrame(frame, frame.Character.TopButtons, frame.AllFixedButtons)
     elseif tags.guild then
-      SkinContainerFrame(frame, {frame.ToggleTabTextButton, frame.ToggleTabLogsButton, frame.ToggleGoldLogsButton}, frame.AllFixedButtons)
       frame.LogsFrame:SetFrameStrata("DIALOG")
       frame.TabTextFrame:SetFrameStrata("DIALOG")
+      SkinContainerFrame(frame, {frame.ToggleTabTextButton, frame.ToggleTabLogsButton, frame.ToggleGoldLogsButton}, frame.AllFixedButtons)
     else
       GW.HandlePortraitFrame(frame, true)
+
+      frame:HookScript("OnShow", function()
+        GW.AddToAnimation("Baganator_" .. frame:GetName(), 0, 1, GetTime(), GW.WINDOW_FADE_DURATION,
+        function(p)
+            frame:SetAlpha(p)
+        end, 1, function() end)
+      end)
     end
   end,
   SearchBox = function(frame)
