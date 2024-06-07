@@ -11,7 +11,7 @@ end
 
 Baganator.Constants.ButtonFrameOffset = 0
 
-local function SkinContainerFrame(frame, topButtons)
+local function SkinContainerFrame(frame, topButtons, topRightButtons)
   frame:GwStripTextures()
   GW.CreateFrameHeaderWithBody(frame, frame:GetTitleText(), "Interface/AddOns/GW2_UI/textures/bag/bagicon", {})
   frame.gwHeader:ClearAllPoints()
@@ -50,6 +50,59 @@ local function SkinContainerFrame(frame, topButtons)
     frame.SearchWidget.SearchBox:SetPoint("TOPLEFT", frame, "TOPLEFT", Baganator.Constants.ButtonFrameOffset, - 28)
   end)
   frame.SearchWidget.SearchBox:SetHeight(22)
+
+  local buttonOffsetX = -36
+  local buttonOffsetY = -30
+  local buttonHeight = topButtons[1]:GetHeight()
+
+  for index, button in ipairs(topButtons) do
+    local button = topButtons[index]
+    button:ClearAllPoints()
+    button:SetPoint("TOPLEFT", buttonOffsetX, buttonOffsetY)
+    buttonOffsetY = buttonOffsetY - buttonHeight - 5
+  end
+
+  local block = false
+  local function SetupRightButtons()
+    local buttonOffsetY = buttonOffsetY - 40
+    for index = #topRightButtons, 1, -1 do
+      local button = topRightButtons[index]
+      if button:IsShown() then
+        button:ClearAllPoints()
+        button:SetPoint("TOPLEFT", buttonOffsetX, buttonOffsetY)
+        buttonOffsetY = buttonOffsetY - buttonHeight - 5
+      end
+    end
+  end
+
+  for _, button in ipairs(topRightButtons) do
+    hooksecurefunc(button, "Show", SetupRightButtons)
+    hooksecurefunc(button, "Hide", SetupRightButtons)
+    hooksecurefunc(button, "SetShown", SetupRightButtons)
+    hooksecurefunc(button, "SetPoint", function()
+      if not block then
+        block = true
+        SetupRightButtons()
+        block = false
+      end
+    end)
+  end
+end
+
+local function SetupIconButton(button, texture)
+  local iconSizeX, iconSizeY = button.Icon:GetSize()
+  if button.Icon2 then
+    button.Icon2:Hide()
+  end
+  button:SetSize(30, 30)
+  button.Icon:SetSize(30, 30)
+  button.Left:Hide()
+  button.Right:Hide()
+  button.Middle:Hide()
+  button:ClearHighlightTexture()
+
+  button.Icon:SetTexture(texture)
+  button.Icon:SetTexCoord(0,1,0,1)
 end
 
 local skinners = {
@@ -72,21 +125,29 @@ local skinners = {
       end)
     end
   end,
-  IconButton = function(frame)
-    -- As the icon isn't available immediately on collapsing bag section icons
-    C_Timer.After(0, function()
-      if frame.icon then
-        frame.icon:SetDrawLayer("OVERLAY")
+  IconButton = function(button, tags)
+    if tags.sort then
+      SetupIconButton(button, "Interface/AddOns/GW2_UI/textures/icons/BagMicroButton-Up")
+    elseif tags.bank then
+      SetupIconButton(button, "Interface/AddOns/GW2_UI/textures/icons/microicons/CollectionsMicroButton-Up")
+    elseif tags.guildBank then
+      SetupIconButton(button, "Interface/AddOns/GW2_UI/textures/icons/microicons/GuildMicroButton-Up")
+    elseif tags.allCharacters then
+      SetupIconButton(button, "Interface/AddOns/GW2_UI/textures/icons/microicons/LFDMicroButton-Up")
+    elseif tags.customise then
+      SetupIconButton(button, "Interface/AddOns/GW2_UI/textures/icons/microicons/MainMenuMicroButton-Up")
+    elseif tags.bagSlots then
+      SetupIconButton(button, "Interface/AddOns/GW2_UI/textures/icons/microicons/BagMicroButton-Up")
+    else
+      button.Icon:SetDrawLayer("OVERLAY")
+      if button.Icon2 then
+        button.Icon2:SetDrawLayer("OVERLAY")
       end
-    end)
-    -- Ensure button icons display
-    for _, r in ipairs({frame:GetRegions()}) do
-      if r:IsObjectType("Texture") then
-        r:SetDrawLayer("OVERLAY")
-      end
+      button.Left:Hide()
+      button.Right:Hide()
+      button.Middle:Hide()
+      button:ClearHighlightTexture()
     end
-    frame:ClearHighlightTexture()
-    frame:GwSkinButton(false, true, false, false, false, true)
   end,
   Button = function(frame)
     frame:GwSkinButton(false, true, false, false, false, false)
@@ -94,23 +155,17 @@ local skinners = {
   ButtonFrame = function(frame, tags)
     frame:SetFrameStrata("HIGH")
     if tags.backpack then
-      SkinContainerFrame(frame)
-      frame.TopButtons[1]:ClearAllPoints()
-      frame.TopButtons[1]:SetPoint("TOPLEFT", frame:GetTitleText(), "TOPRIGHT", 10, 0)
+      SkinContainerFrame(frame, frame.TopButtons, frame.AllFixedButtons)
       frame.BagSlots:ClearAllPoints()
       frame.BagSlots:SetPoint("BOTTOM", frame, "TOP", 0, 8)
-      frame.BagSlots:SetPoint("LEFT", frame.TopButtons[1])
+      frame.BagSlots:SetPoint("LEFT", frame:GetTitleText(), "RIGHT")
     elseif tags.bank then
-      SkinContainerFrame(frame)
-      frame.Character.TopButtons[1]:ClearAllPoints()
-      frame.Character.TopButtons[1]:SetPoint("TOPLEFT", frame:GetTitleText(), "TOPRIGHT", 10, 0)
+      SkinContainerFrame(frame, frame.Character.TopButtons, frame.AllFixedButtons)
       frame.Character.BagSlots:ClearAllPoints()
       frame.Character.BagSlots:SetPoint("BOTTOM", frame, "TOP", 0, 8)
-      frame.Character.BagSlots:SetPoint("LEFT", frame.Character.TopButtons[1], "RIGHT")
+      frame.Character.BagSlots:SetPoint("LEFT", frame:GetTitleText(), "RIGHT")
     elseif tags.guild then
-      SkinContainerFrame(frame)
-      frame.LiveButtons[1]:ClearAllPoints()
-      frame.LiveButtons[1]:SetPoint("TOPLEFT", frame:GetTitleText(), "TOPRIGHT", 10, 0)
+      SkinContainerFrame(frame, {frame.ToggleTabTextButton, frame.ToggleTabLogsButton, frame.ToggleGoldLogsButton}, frame.AllFixedButtons)
       frame.LogsFrame:SetFrameStrata("DIALOG")
       frame.TabTextFrame:SetFrameStrata("DIALOG")
     else
