@@ -196,7 +196,6 @@ frame:RegisterEvent("PLAYER_ENTERING_WORLD")
 frame:SetScript("OnEvent", function()
   Baganator.API.Skins.RegisterListener(SkinFrame)
 
-  Baganator.Config.Set(Baganator.Config.Options.ICON_TEXT_QUALITY_COLORS, true)
   Baganator.Config.Set(Baganator.Config.Options.EMPTY_SLOT_BACKGROUND, true)
 
   for _, details in ipairs(Baganator.API.Skins.GetAllFrames()) do
