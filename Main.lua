@@ -44,6 +44,8 @@ local function SkinContainerFrame(frame, topButtons, topRightButtons)
   frame.borderBottomRight:SetSize(128, 128)
   frame.borderBottomRight:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", 0, 0)
 
+  frame:SetHitRectInsets(-40, 0, -25, 0)
+
   hooksecurefunc(frame.SearchWidget, "SetSpacing", function(_, sideSpacing)
     frame.SearchWidget:ClearAllPoints()
     frame.SearchWidget.SearchBox:SetPoint("RIGHT", frame, -sideSpacing - 36, 0)
