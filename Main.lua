@@ -315,7 +315,12 @@ local skinners = {
   CategoryLabel = function(btn)
     btn:GetFontString():SetFont(UNIT_NAME_FONT, 11)
     btn:GetFontString():SetTextColor(1, 1, 1)
-  end
+  end,
+  CornerWidget = function(frame, tags)
+    if frame:IsObjectType("FontString") then
+      frame:SetFont(UNIT_NAME_FONT, 12, "THINOUTLINED")
+    end
+  end,
 }
 
 if C_AddOns.IsAddOnLoaded("Masque") then
