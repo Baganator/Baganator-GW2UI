@@ -54,7 +54,8 @@ local function SkinContainerFrame(frame, topButtons, topRightButtons)
   frame.SearchWidget.SearchBox:SetHeight(22)
 
   local buttonOffsetX = -36
-  local buttonOffsetY = -30
+  local originalOffsetY = -30
+  local buttonOffsetY = originalOffsetY
   local buttonHeight = topButtons[1]:GetHeight()
 
   for index, button in ipairs(topButtons) do
@@ -67,6 +68,9 @@ local function SkinContainerFrame(frame, topButtons, topRightButtons)
   local block = false
   local function SetupRightButtons()
     local buttonOffsetY = buttonOffsetY - 40
+    if not topButtons[1]:IsVisible() then
+      buttonOffsetY = originalOffsetY
+    end
     for index = #topRightButtons, 1, -1 do
       local button = topRightButtons[index]
       if button:IsShown() then
@@ -76,6 +80,23 @@ local function SkinContainerFrame(frame, topButtons, topRightButtons)
       end
     end
   end
+
+  hooksecurefunc(frame, "SetSize", function(_, width, height)
+    local frameBottom = frame:GetBottom()
+    local buttonsBottom = topRightButtons[1]:GetBottom()
+    local missingHeight = (frame:GetBottom() and frame:GetBottom() + 30 or 0) - (topRightButtons[1]:GetBottom() or 0)
+    if missingHeight > 0 then
+      frame:SetHeight(height + missingHeight)
+    end
+  end)
+
+  topButtons[1]:HookScript("OnShow", function()
+    SetupRightButtons()
+  end)
+
+  topButtons[1]:HookScript("OnHide", function()
+    SetupRightButtons()
+  end)
 
   for _, button in ipairs(topRightButtons) do
     hooksecurefunc(button, "Show", SetupRightButtons)
