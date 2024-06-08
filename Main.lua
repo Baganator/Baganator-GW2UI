@@ -234,6 +234,16 @@ local skinners = {
   TopTabButton = function(frame)
     frame:GwStripTextures()
     frame:GwSkinButton(false, true, false, false, false, false)
+    if Baganator.Constants.IsRetail then
+      -- Work around GW2 bug on retail where the hover texture doesn't hide
+      -- properly
+      frame:HookScript("OnDisable", function()
+        frame.hover:SetAlpha(0)
+      end)
+      frame:HookScript("OnEnable", function()
+        frame.hover:SetAlpha(0)
+      end)
+    end
   end,
   SideTabButton = function(frame)
     --Not available in GW2
