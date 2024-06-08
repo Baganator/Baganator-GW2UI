@@ -122,7 +122,6 @@ local function SkinContainerFrame(frame, topButtons, topRightButtons)
 end
 
 local function SetupIconButton(button, texture)
-  local iconSizeX, iconSizeY = button.Icon:GetSize()
   if button.Icon2 then
     button.Icon2:Hide()
   end
@@ -132,7 +131,8 @@ local function SetupIconButton(button, texture)
   button.Right:Hide()
   button.Middle:Hide()
   button:ClearHighlightTexture()
-
+  button:SetHighlightTexture(texture)
+  button:GetHighlightTexture():SetTexCoord(0,1,0,1)
   button.Icon:SetTexture(texture)
   button.Icon:SetTexCoord(0,1,0,1)
 end
