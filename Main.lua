@@ -342,7 +342,7 @@ local function SkinFrame(details)
 end
 
 local function DisableGW2Defaults()
-  if Baganator.Constants.IsClassic then
+  if GW.SetSetting then
     GW.SetSetting("BAG_SHOW_EQUIPMENT_SET_NAME",  false)
     GW.SetSetting("BAG_ITEM_JUNK_ICON_SHOW",  false)
     GW.SetSetting("BAG_ITEM_UPGRADE_ICON_SHOW",  false)
