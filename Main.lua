@@ -44,7 +44,8 @@ local function SkinContainerFrame(frame, topButtons, topRightButtons)
   frame.borderBottomRight:SetSize(128, 128)
   frame.borderBottomRight:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", 0, 0)
 
-  frame:SetHitRectInsets(-40, 0, -25, 0)
+  frame:SetHitRectInsets(-40, 0, -15, 0)
+  frame:SetClampRectInsets(-40, 0, 15, 0)
 
   hooksecurefunc(frame.SearchWidget, "SetSpacing", function(_, sideSpacing)
     frame.SearchWidget:ClearAllPoints()
@@ -125,12 +126,16 @@ local function SkinContainerFrame(frame, topButtons, topRightButtons)
   frame.borderBottomRight:AddMaskTexture(frame.backgroundMask)
   frame.footer:AddMaskTexture(frame.backgroundMask)
 
+  Baganator.CallbackRegistry:RegisterCallback("ResetFramePositions", function()
+    C_Timer.After(0, function()
+      if frame:GetLeft() < 60 then
+        frame:SetPoint("LEFT", 60, 0)
+        frame:OnDragStop()
+      end
+    end)
+  end)
 
   frame:HookScript("OnShow", function()
-    if frame:GetLeft() < 45 then
-      frame:SetPoint("LEFT", 45, 0)
-    end
-
     GW.AddToAnimation("Baganator_" .. frame:GetName(), 0, 1, GetTime(), GW.WINDOW_FADE_DURATION,
     function(p)
         frame:SetAlpha(p)
