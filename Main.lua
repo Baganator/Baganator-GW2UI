@@ -68,6 +68,9 @@ local function SkinContainerFrame(frame, topButtons, topRightButtons)
 
   local block = false
   local function SetupRightButtons()
+    if not frame:IsVisible() then
+      return
+    end
     local buttonOffsetY = buttonOffsetY - 40
     if not topButtons[1]:IsVisible() then
       buttonOffsetY = originalOffsetY
@@ -99,17 +102,8 @@ local function SkinContainerFrame(frame, topButtons, topRightButtons)
     SetupRightButtons()
   end)
 
-  for _, button in ipairs(topRightButtons) do
-    hooksecurefunc(button, "Show", SetupRightButtons)
-    hooksecurefunc(button, "Hide", SetupRightButtons)
-    hooksecurefunc(button, "SetShown", SetupRightButtons)
-    hooksecurefunc(button, "SetPoint", function()
-      if not block then
-        block = true
-        SetupRightButtons()
-        block = false
-      end
-    end)
+  if frame.UpdateTransferButton then
+    hooksecurefunc(frame, "UpdateTransferButton", SetupRightButtons)
   end
 
   frame.backgroundMask = UIParent:CreateMaskTexture()
