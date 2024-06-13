@@ -128,17 +128,6 @@ local function SkinContainerFrame(frame, topButtons, topRightButtons)
       end
     end)
   end)
-
-  frame:HookScript("OnShow", function()
-    GW.AddToAnimation("Baganator_" .. frame:GetName(), 0, 1, GetTime(), GW.WINDOW_FADE_DURATION,
-    function(p)
-        frame:SetAlpha(p)
-        frame.backgroundMask:SetPoint("BOTTOMRIGHT", frame.tex, "BOTTOMLEFT", GW.lerp(-64, frame.tex:GetWidth(), p) , 0)
-    end, 1, function()
-        frame.backgroundMask:SetPoint("TOPLEFT", frame.tex, "TOPLEFT", -64, 64)
-        frame.backgroundMask:SetPoint("BOTTOMRIGHT", frame.tex, "BOTTOMLEFT",-64, 0)
-    end)
-  end)
 end
 
 local function SetupIconButton(button, texture)
@@ -222,13 +211,6 @@ local skinners = {
       SkinContainerFrame(frame, {frame.ToggleTabTextButton, frame.ToggleTabLogsButton, frame.ToggleGoldLogsButton}, frame.AllFixedButtons)
     else
       GW.HandlePortraitFrame(frame, true)
-
-      frame:HookScript("OnShow", function()
-        GW.AddToAnimation("Baganator_" .. frame:GetName(), 0, 1, GetTime(), GW.WINDOW_FADE_DURATION,
-        function(p)
-            frame:SetAlpha(p)
-        end, 1, function() end)
-      end)
     end
   end,
   SearchBox = function(frame)
