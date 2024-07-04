@@ -275,8 +275,8 @@ local skinners = {
     frame:GwSkinSliderFrame()
     frame:GetThumbTexture():SetSize(16, 16)
     frame.tex:SetDrawLayer("ARTWORK")
-    frame.tex:SetPoint("TOPLEFT", -10, 2)
-    frame.tex:SetPoint("BOTTOMRIGHT", 10, -2)
+    frame.tex:SetPoint("TOPLEFT", 0, 2)
+    frame.tex:SetPoint("BOTTOMRIGHT", 0, -2)
   end,
   InsetFrame = function(frame)
     frame.Bg:Hide()
