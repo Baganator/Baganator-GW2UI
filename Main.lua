@@ -49,7 +49,7 @@ local function SkinContainerFrame(frame, topButtons, topRightButtons)
 
   hooksecurefunc(frame.SearchWidget, "SetSpacing", function(_, sideSpacing)
     frame.SearchWidget:ClearAllPoints()
-    frame.SearchWidget.SearchBox:SetPoint("RIGHT", frame, -sideSpacing - 36, 0)
+    frame.SearchWidget.SearchBox:SetPoint("RIGHT", frame, -sideSpacing - 71, 0)
     frame.SearchWidget.SearchBox:SetPoint("TOPLEFT", frame, "TOPLEFT", Baganator.Constants.ButtonFrameOffset, - 28)
   end)
   frame.SearchWidget.SearchBox:SetHeight(22)
