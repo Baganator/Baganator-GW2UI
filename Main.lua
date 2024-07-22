@@ -9,8 +9,6 @@ local function ConvertTags(tags)
   return res
 end
 
-Baganator.Constants.ButtonFrameOffset = 0
-
 local function SkinContainerFrame(frame, topButtons, topRightButtons)
   frame:GwStripTextures()
   GW.CreateFrameHeaderWithBody(frame, frame:GetTitleText(), "Interface/AddOns/GW2_UI/textures/bag/bagicon", {})
@@ -47,10 +45,14 @@ local function SkinContainerFrame(frame, topButtons, topRightButtons)
   frame:SetHitRectInsets(-40, 0, -15, 0)
   frame:SetClampRectInsets(-40, 0, 15, 0)
 
+  local buttonFrameOffset = 0
+  if Baganator.Constants.IsRetail then
+    buttonFrameOffset = 6
+  end
   hooksecurefunc(frame.SearchWidget, "SetSpacing", function(_, sideSpacing)
     frame.SearchWidget:ClearAllPoints()
     frame.SearchWidget.SearchBox:SetPoint("RIGHT", frame, -sideSpacing - 71, 0)
-    frame.SearchWidget.SearchBox:SetPoint("TOPLEFT", frame, "TOPLEFT", Baganator.Constants.ButtonFrameOffset, - 28)
+    frame.SearchWidget.SearchBox:SetPoint("TOPLEFT", frame, "TOPLEFT", buttonFrameOffset, - 28)
   end)
   frame.SearchWidget.SearchBox:SetHeight(22)
 
@@ -360,7 +362,7 @@ frame:RegisterEvent("PLAYER_ENTERING_WORLD")
 frame:SetScript("OnEvent", function()
   Baganator.API.Skins.RegisterListener(SkinFrame)
 
-  Baganator.Config.Set(Baganator.Config.Options.EMPTY_SLOT_BACKGROUND, true)
+  BAGANATOR_CONFIG["empty_slot_background"] = true
 
   for _, details in ipairs(Baganator.API.Skins.GetAllFrames()) do
     SkinFrame(details)
