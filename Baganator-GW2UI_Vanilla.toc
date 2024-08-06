@@ -1,0 +1,7 @@
+## Interface: 11503
+## Title: Baganator (GW2 Skin)
+## Version: @project-version@
+## Author: plusmouse
+## RequiredDeps: Baganator, GW2_UI
+
+Main_Vanilla.lua

@@ -20,7 +20,16 @@ jobs:
 
     - uses: BigWigsMods/packager@master
       with:
-        args: -p 1030664 -a EGPXORG1
+        args: -p 1030664 -a EGPXORG1 -m .pkgmeta_vanilla -g classic
+      env:
+        CF_API_KEY: ${{ secrets.plusmouse_curseforge }}
+        WAGO_API_TOKEN: ${{ secrets.plusmouse_wago }}
+
+    - run: rm Baganator-GW2UI_Vanilla.toc
+
+    - uses: BigWigsMods/packager@master
+      with:
+        args: -p 1030664 -a EGPXORG1 -m .pkgmeta
       env:
         CF_API_KEY: ${{ secrets.plusmouse_curseforge }}
         WAGO_API_TOKEN: ${{ secrets.plusmouse_wago }}

@@ -1,0 +1,10 @@
+package-as: Baganator-GW2UI
+ignore:
+  - Baganator-GW2UI_Cata.toc
+  - Baganator-GW2UI_Mainline.toc
+  - README.md
+  - tmp
+  - scripts
+required-dependencies:
+  - baganator
+  - gw2-ui

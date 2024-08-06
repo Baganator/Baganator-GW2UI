@@ -1,4 +1,4 @@
-## Interface: 11502, 40400, 100207, 110000
+## Interface: 40400
 ## Title: Baganator (GW2 Skin)
 ## Version: @project-version@
 ## Author: plusmouse
