@@ -154,7 +154,11 @@ local skinners = {
     if frame:GetName() and not _G[frame:GetName().."Cooldown"] then
       CreateFrame("Cooldown", frame:GetName().."Cooldown", frame)
     end
-    GW.SkinBagItemButton(frame:GetName(), frame, 37)
+    if Baganator.Constants.IsClassic then
+      GW.SkinBagItemButton(frame:GetName(), frame, 37)
+    else
+      GW.SkinBagItemButton(frame, 37)
+    end
     -- Ensure item icon and border is set GW2 style
     if frame.SetItemButtonQuality then
       hooksecurefunc(frame, "SetItemButtonQuality", GW.SetBagItemButtonQualitySkin)

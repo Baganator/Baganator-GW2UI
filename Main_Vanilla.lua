@@ -157,7 +157,7 @@ local skinners = {
       CreateFrame("Cooldown", frame:GetName().."Cooldown", frame)
     end
     if frame:GetName() then
-      pcall(GW, "SkinBagItemButton", frame:GetName(), frame, 37)
+      pcall(GW, "SkinBagItemButton", frame, 37)
     end
     -- Ensure item icon and border is set GW2 style
     if frame.SetItemButtonQuality then
