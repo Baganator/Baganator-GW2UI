@@ -364,6 +364,7 @@ end
 local frame = CreateFrame("Frame")
 frame:RegisterEvent("PLAYER_ENTERING_WORLD")
 frame:SetScript("OnEvent", function()
+  frame:UnregisterEvent("PLAYER_ENTERING_WORLD")
   Baganator.API.Skins.RegisterListener(SkinFrame)
 
   BAGANATOR_CONFIG["empty_slot_background"] = true
